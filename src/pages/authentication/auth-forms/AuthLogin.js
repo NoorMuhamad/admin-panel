@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
-// material-ui
 import {
   Button,
   Checkbox,
@@ -18,53 +17,70 @@ import {
   Typography
 } from '@mui/material';
 
-// third party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 
-// project import
 import FirebaseSocial from './FirebaseSocial';
 import AnimateButton from 'components/@extended/AnimateButton';
 
-// assets
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
-
-// ============================|| FIREBASE - LOGIN ||============================ //
+import useMutationHook from '../../../hooks/useMutationHook';
+import { LOGIN_MUTATION } from '../../../graphQl/auth/index';
+import { useDispatch } from 'react-redux';
+import { setUser } from 'reducers/authReducer'
+import { useNavigate } from 'react-router-dom';
 
 const AuthLogin = () => {
-  const [checked, setChecked] = React.useState(false);
 
-  const [showPassword, setShowPassword] = React.useState(false);
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
+  const { handleMutation } = useMutationHook(LOGIN_MUTATION, {}, false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [checked, setChecked] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+
+  const handleMouseDownPassword = (event) => event.preventDefault();
+
+  const handleSubmit = async (values, { setErrors, setStatus, setSubmitting }) => {
+    try {
+      const { login } = await handleMutation({
+        loginInput: {
+          email: values.email,
+          password: values.password,
+        },
+      });
+
+      if (login.accessToken) {
+        dispatch(setUser({ user: { accessToken: login.accessToken, ...login.user } }))
+        navigate('/dashboard');
+      }
+      setStatus({ success: false });
+      setSubmitting(false);
+    } catch (err) {
+      setStatus({ success: false });
+      setErrors({ submit: err.message });
+      setSubmitting(false);
+    }
   };
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
+  const authValidationSchema = Yup.object().shape({
+    email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+    password: Yup.string().max(255).required('Password is required')
+  });
+
+  const authInitialValues = {
+    email: '',
+    password: '',
+    submit: null
   };
 
   return (
     <>
       <Formik
-        initialValues={{
-          email: 'info@codedthemes.com',
-          password: '123456',
-          submit: null
-        }}
-        validationSchema={Yup.object().shape({
-          email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-          password: Yup.string().max(255).required('Password is required')
-        })}
-        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-          try {
-            setStatus({ success: false });
-            setSubmitting(false);
-          } catch (err) {
-            setStatus({ success: false });
-            setErrors({ submit: err.message });
-            setSubmitting(false);
-          }
-        }}
+        initialValues={authInitialValues}
+        validationSchema={authValidationSchema}
+        onSubmit={handleSubmit}
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>

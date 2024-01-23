@@ -19,13 +19,13 @@ import {
 } from '@mui/material';
 
 // project import
-import OrdersTable from './OrdersTable';
-import IncomeAreaChart from './IncomeAreaChart';
-import MonthlyBarChart from './MonthlyBarChart';
-import ReportAreaChart from './ReportAreaChart';
-import SalesColumnChart from './SalesColumnChart';
 import MainCard from 'components/MainCard';
 import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
+import IncomeAreaChart from './IncomeAreaChart';
+import MonthlyBarChart from './MonthlyBarChart';
+import OrdersTable from './OrdersTable';
+import ReportAreaChart from './ReportAreaChart';
+import SalesColumnChart from './SalesColumnChart';
 
 // assets
 import { GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
@@ -69,7 +69,7 @@ const status = [
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
-const DashboardDefault = () => {
+const Dashboard = () => {
   const [value, setValue] = useState('today');
   const [slot, setSlot] = useState('week');
 
@@ -341,4 +341,4 @@ const DashboardDefault = () => {
   );
 };
 
-export default DashboardDefault;
+export default Dashboard;

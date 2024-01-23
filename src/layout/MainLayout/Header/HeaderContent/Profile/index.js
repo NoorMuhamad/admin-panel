@@ -28,6 +28,9 @@ import SettingTab from './SettingTab';
 // assets
 import avatar1 from 'assets/images/users/avatar-1.png';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { logout } from 'reducers/authReducer';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -51,13 +54,14 @@ function a11yProps(index) {
   };
 }
 
-// ==============================|| HEADER CONTENT - PROFILE ||============================== //
-
 const Profile = () => {
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
-    // logout
+    dispatch(logout())
+    navigate('/login');
   };
 
   const anchorRef = useRef(null);

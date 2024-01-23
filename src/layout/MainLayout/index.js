@@ -9,11 +9,11 @@ import { Box, Toolbar, useMediaQuery } from '@mui/material';
 // project import
 import Drawer from './Drawer';
 import Header from './Header';
-import navigation from 'menu-items';
+import navigation from 'menuItems';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
 
 // types
-import { openDrawer } from 'store/reducers/menu';
+import { setOpenDrawer } from 'reducers/menuReducer';
 
 // ==============================|| MAIN LAYOUT ||============================== //
 
@@ -22,19 +22,19 @@ const MainLayout = () => {
   const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
   const dispatch = useDispatch();
 
-  const { drawerOpen } = useSelector((state) => state.menu);
+  const { drawerOpen } = useSelector((state) => state.menuReducer);
 
   // drawer toggler
   const [open, setOpen] = useState(drawerOpen);
   const handleDrawerToggle = () => {
     setOpen(!open);
-    dispatch(openDrawer({ drawerOpen: !open }));
+    dispatch(setOpenDrawer({ drawerOpen: !open }));
   };
 
   // set media wise responsive drawer
   useEffect(() => {
     setOpen(!matchDownLG);
-    dispatch(openDrawer({ drawerOpen: !matchDownLG }));
+    dispatch(setOpenDrawer({ drawerOpen: !matchDownLG }));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matchDownLG]);

@@ -27,3 +27,8 @@ export const strengthIndicator = (number) => {
   if (hasMixed(number)) strengths += 1;
   return strengths;
 };
+
+export const isAuthenticated = () => {
+  const token = localStorage.getItem('user');
+  return Boolean(token);
+}; 

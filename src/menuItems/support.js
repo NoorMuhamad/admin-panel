@@ -13,6 +13,7 @@ const support = {
   id: 'support',
   title: 'Support',
   type: 'group',
+  role: ['OWNER', 'ADMIN'],
   children: [
     {
       id: 'sample-page',

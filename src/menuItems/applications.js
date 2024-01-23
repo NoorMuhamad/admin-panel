@@ -1,21 +1,31 @@
 // assets
 import {
-	CustomerServiceOutlined
+	CustomerServiceOutlined,
+	UsergroupAddOutlined
 } from '@ant-design/icons';
 
 // icons
 const icons = {
-	CustomerServiceOutlined
+	CustomerServiceOutlined,
+	UsergroupAddOutlined
 };
 
 const applications = {
 	id: 'group-application',
 	title: 'Applications',
 	type: 'group',
+	role: ['OWNER', 'ADMIN'],
 	children: [
 		{
+			id: 'user',
+			title: 'Users',
+			type: 'item',
+			url: '/user',
+			icon: icons.UsergroupAddOutlined,
+		},
+		{
 			id: 'customer',
-			title: 'Customer',
+			title: 'Customers',
 			type: 'item',
 			url: '/customer',
 			icon: icons.CustomerServiceOutlined,

@@ -13,6 +13,7 @@ const pages = {
   id: 'authentication',
   title: 'Authentication',
   type: 'group',
+  role: ['OWNER', 'ADMIN'],
   children: [
     {
       id: 'login1',
