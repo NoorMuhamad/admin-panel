@@ -18,8 +18,6 @@ const locations = {
 			type: 'item',
 			url: '/locations',
 			icon: icons.EnvironmentOutlined,
-			breadcrumbs: false
-
 		},
 	]
 };

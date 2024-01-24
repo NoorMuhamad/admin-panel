@@ -20,14 +20,14 @@ const applications = {
 			id: 'user',
 			title: 'Users',
 			type: 'item',
-			url: '/user',
+			url: '/users',
 			icon: icons.UsergroupAddOutlined,
 		},
 		{
 			id: 'customer',
 			title: 'Customers',
 			type: 'item',
-			url: '/customer',
+			url: '/customers',
 			icon: icons.CustomerServiceOutlined,
 		}
 	]

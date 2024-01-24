@@ -53,6 +53,29 @@ export default function ThemeCustomization({ children }) {
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={themes}>
         <CssBaseline />
+        <style>
+          {`
+            /* WebKit browsers (Chrome, Safari) */
+            ::-webkit-scrollbar {
+              width: 2px; /* Set the width of the scrollbar on the y-axis */
+              height: 2px; /* Set the height of the scrollbar on the x-axis */
+            }
+
+            ::-webkit-scrollbar-thumb {
+              background-color: #3498db; /* Set the color of the scrollbar thumb */
+            }
+
+            ::-webkit-scrollbar-track {
+              background-color: #ecf0f1; /* Set the color of the scrollbar track */
+            }
+
+            /* For Firefox */
+            /* Note: Firefox does not support setting the width directly, so we use the 'border' property */
+            ::-moz-scrollbar {
+              border: 2px solid #3498db; /* Set the border width for Firefox on the y-axis */
+            }
+          `}
+        </style>
         {children}
       </ThemeProvider>
     </StyledEngineProvider>

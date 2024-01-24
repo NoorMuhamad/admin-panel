@@ -1,13 +1,9 @@
-// assets
 import { DollarOutlined, DropboxOutlined } from '@ant-design/icons';
 
-// icons
 const icons = {
   DollarOutlined,
   DropboxOutlined
 };
-
-// ==============================|| MENU ITEMS - DASHBOARD ||============================== //
 
 const payments = {
   id: 'group-payments',
@@ -21,8 +17,6 @@ const payments = {
       type: 'item',
       url: '/payments',
       icon: icons.DollarOutlined,
-      breadcrumbs: false
-
     },
     {
       id: 'packages',
@@ -30,7 +24,6 @@ const payments = {
       type: 'item',
       url: '/packages',
       icon: icons.DropboxOutlined,
-      breadcrumbs: false
     },
 
   ]

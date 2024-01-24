@@ -1,24 +1,21 @@
 import { lazy } from 'react';
 
-// project import
 import Loadable from 'components/Loadable';
 import MainLayout from 'layout/MainLayout/index';
 import withAuthentication from 'components/withAuthentication';
 
-// render - dashboard
 const Dashboard = withAuthentication(Loadable(lazy(() => import('pages/dashboard'))), ['OWNER']);
-
-// render - sample page
 const SamplePage = withAuthentication(Loadable(lazy(() => import('pages/extra-pages/SamplePage'))), ['OWNER', 'ADMIN', 'staff']);
-
-// render - utilities (assuming these don't require role-based access)
-const Typography = withAuthentication(Loadable(lazy(() => import('pages/components-overview/Typography'))), ['OWNER', 'ADMIN', 'staff']);
-const Color = withAuthentication(Loadable(lazy(() => import('pages/components-overview/Color'))), ['OWNER', 'ADMIN', 'staff']);
-const Shadow = withAuthentication(Loadable(lazy(() => import('pages/components-overview/Shadow'))), ['OWNER', 'ADMIN', 'staff']);
-const AntIcons = withAuthentication(Loadable(lazy(() => import('pages/components-overview/AntIcons'))), ['OWNER', 'ADMIN', 'staff']);
-const Customer = withAuthentication(Loadable(lazy(() => import('pages/customer'))), ['OWNER', 'ADMIN', 'staff']);
-
-// ==============================|| MAIN ROUTING ||============================== //
+const Customers = withAuthentication(Loadable(lazy(() => import('pages/customers'))), ['OWNER', 'ADMIN', 'staff']);
+const Collections = withAuthentication(Loadable(lazy(() => import('pages/collections'))), ['OWNER', 'ADMIN', 'staff']);
+const Complaints = withAuthentication(Loadable(lazy(() => import('pages/complaints'))), ['OWNER', 'ADMIN', 'staff']);
+const Users = withAuthentication(Loadable(lazy(() => import('pages/users'))), ['OWNER', 'ADMIN', 'staff']);
+const Payments = withAuthentication(Loadable(lazy(() => import('pages/payments'))), ['OWNER', 'ADMIN', 'staff']);
+const Packages = withAuthentication(Loadable(lazy(() => import('pages/packages'))), ['OWNER', 'ADMIN', 'staff']);
+const SmsTemplate = withAuthentication(Loadable(lazy(() => import('pages/smsTemplates'))), ['OWNER', 'ADMIN', 'staff']);
+const SmsLogs = withAuthentication(Loadable(lazy(() => import('pages/smsLogs'))), ['OWNER', 'ADMIN', 'staff']);
+const Locations = withAuthentication(Loadable(lazy(() => import('pages/locations'))), ['OWNER', 'ADMIN', 'staff']);
+const Settings = withAuthentication(Loadable(lazy(() => import('pages/settings'))), ['OWNER', 'ADMIN', 'staff']);
 
 const MainRoutes = {
   path: '/',
@@ -29,28 +26,48 @@ const MainRoutes = {
       element: <Dashboard />
     },
     {
-      path: 'color',
-      element: <Color />
+      path: 'customers',
+      element: <Customers />
+    },
+    {
+      path: 'collections',
+      element: <Collections />
+    },
+    {
+      path: 'complaints',
+      element: <Complaints />
     },
     {
       path: 'sample-page',
       element: <SamplePage />
     },
     {
-      path: 'customer',
-      element: <Customer />
+      path: 'users',
+      element: <Users />
     },
     {
-      path: 'shadow',
-      element: <Shadow />
+      path: 'payments',
+      element: <Payments />
     },
     {
-      path: 'typography',
-      element: <Typography />
+      path: 'packages',
+      element: <Packages />
     },
     {
-      path: 'icons/ant',
-      element: <AntIcons />
+      path: 'sms-templates',
+      element: <SmsTemplate />
+    },
+    {
+      path: 'sms-logs',
+      element: <SmsLogs />
+    },
+    {
+      path: 'locations',
+      element: <Locations />
+    },
+    {
+      path: 'settings',
+      element: <Settings />
     }
   ]
 };

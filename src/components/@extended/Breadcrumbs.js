@@ -71,6 +71,7 @@ const Breadcrumbs = ({ navigation, title, ...others }) => {
     );
 
     // main
+
     if (item.breadcrumbs !== false) {
       breadcrumbContent = (
         <MainCard border={false} sx={{ mb: 3, bgcolor: 'transparent' }} {...others} content={false}>

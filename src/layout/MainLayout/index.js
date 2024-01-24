@@ -12,10 +12,7 @@ import Header from './Header';
 import navigation from 'menuItems';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
 
-// types
 import { setOpenDrawer } from 'reducers/menuReducer';
-
-// ==============================|| MAIN LAYOUT ||============================== //
 
 const MainLayout = () => {
   const theme = useTheme();

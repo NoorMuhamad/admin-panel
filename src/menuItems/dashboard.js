@@ -31,7 +31,6 @@ const dashboard = {
       type: 'item',
       url: '/collections',
       icon: icons.ReconciliationOutlined,
-      breadcrumbs: false
     },
     {
       id: 'complaint',
@@ -39,7 +38,6 @@ const dashboard = {
       type: 'item',
       url: '/complaints',
       icon: icons.DashboardOutlined,
-      breadcrumbs: false
     }
   ]
 };

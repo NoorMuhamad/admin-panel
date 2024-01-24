@@ -18,8 +18,6 @@ const settings = {
 			type: 'item',
 			url: '/settings',
 			icon: icons.ToolOutlined,
-			breadcrumbs: false
-
 		},
 	]
 };
