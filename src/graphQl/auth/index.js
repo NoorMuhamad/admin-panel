@@ -4,7 +4,8 @@ export const LOGIN_MUTATION = gql`
   mutation Login($loginInput: LoginInput!) {
     login(loginInput: $loginInput) {
       user {
-        username
+        firstName
+        lastName
         role
 				email
 				phoneNumber

@@ -1,283 +1,83 @@
-import React, { useState } from 'react';
-import { Table, Tag, Space } from 'antd';
-import { EditOutlined, DeleteOutlined, SyncOutlined, CheckCircleOutlined } from '@ant-design/icons';
-const columns = [
-	{
-		title: '#',
-		dataIndex: 'key',
-		key: 'key',
-		sorter: (a, b) => a.age - b.age,
-	},
-	// {
-	// 	title: 'User Info',
-	// 	dataIndex: 'userInfo',
-	// 	key: 'userInfo',
-	// 	sorter: (a, b) => a.userInfo - b.userInfo,
-	// 	render: (text, record) => (
-	// 		<Space direction="vertical">
-	// 			<Space style={{ fontSize: '12px' }}>
-	// 				<img
-	// 					src={record.avatar}
-	// 					alt="avatar"
-	// 					style={{ borderRadius: '50%', width: 15, height: 15 }}
-	// 				/>
-	// 				<span style={{ fontSize: '12px' }}>{text}</span>
-	// 			</Space>
-	// 			<a href={`mailto:${record.email}`} style={{ fontSize: '12px' }}>
-	// 				{record.email}
-	// 			</a>
-	// 		</Space>
-	// 	),
-	// },
-	{
-		title: 'Contact',
-		dataIndex: 'contact',
-		key: 'contact',
-		sorter: (a, b) => a.contact - b.contact,
-	},
-	{
-		title: 'Age',
-		dataIndex: 'age',
-		key: 'age',
-		sorter: (a, b) => a.age - b.age,
-	},
-	{
-		title: 'Country',
-		dataIndex: 'country',
-		key: 'country',
-		sorter: (a, b) => a.country - b.country,
-	},
-	{
-		title: 'Status',
-		key: 'status',
-		dataIndex: 'status',
+import { Paper } from '@mui/material';
+import { Modal } from 'antd';
+import SpinLoader from 'components/SpinLoader';
+import useQueryHook from 'hooks/useQueryHook';
+import { useState } from 'react';
+import GET_USERS from '../../graphQl/user';
+import Header from './components/header';
+import UserForm from './components/userForm';
+import List from './list';
 
-		width: 100,
-		sorter: (a, b) => a.status - b.status,
-		render: (status) => {
-			let color = 'green';
-			if (status === 'Pending') {
-				color = 'geekblue';
-			} else if (status === 'Rejected') {
-				color = 'volcano';
-			}
-			return (
-				<Tag color={color} key={status}>
-					{status.toUpperCase()}
-				</Tag>
-			);
-		},
-	},
-	{
-		title: 'Actions',
-		key: 'action',
-		fixed: 'right',
-		align: 'center',// You can keep this line if you want the column fixed to the right
-		render: (_, record) => (
-			<Space size="middle" >
-				<a><CheckCircleOutlined /></a>
-				<a><EditOutlined /></a>
-				<a><DeleteOutlined /></a>
-				{record.status === 'Pending' && <a><SyncOutlined spin /></a>}
-			</Space>
-		),
-	},
-];
-
-const data = [
-	{
-		key: '1',
-		userInfo: 'Gabriel Green',
-		contact: '+1 (457) 348-4705',
-		age: 63,
-		country: 'Kyrgyzstan',
-		status: 'Verified',
-		avatar: 'path_to_avatar_image',
-		email: 'nizcanu@gmail.com',
-	},
-	{
-		key: '1',
-		userInfo: 'Gabriel Green',
-		contact: '+1 (457) 348-4705',
-		age: 63,
-		country: 'Kyrgyzstan',
-		status: 'Verified',
-		avatar: 'path_to_avatar_image', // Replace with actual image path
-		email: 'nizcanu@gmail.com',
-	},
-	{
-		key: '1',
-		userInfo: 'Gabriel Green',
-		contact: '+1 (457) 348-4705',
-		age: 63,
-		country: 'Kyrgyzstan',
-		status: 'Verified',
-		avatar: 'path_to_avatar_image', // Replace with actual image path
-		email: 'nizcanu@gmail.com',
-	},
-	{
-		key: '1',
-		userInfo: 'Gabriel Green',
-		contact: '+1 (457) 348-4705',
-		age: 63,
-		country: 'Kyrgyzstan',
-		status: 'Verified',
-		avatar: 'path_to_avatar_image', // Replace with actual image path
-		email: 'nizcanu@gmail.com',
-	},
-	{
-		key: '1',
-		userInfo: 'Gabriel Green',
-		contact: '+1 (457) 348-4705',
-		age: 63,
-		country: 'Kyrgyzstan',
-		status: 'Verified',
-		avatar: 'path_to_avatar_image', // Replace with actual image path
-		email: 'nizcanu@gmail.com',
-	},
-	{
-		key: '1',
-		userInfo: 'Gabriel Green',
-		contact: '+1 (457) 348-4705',
-		age: 63,
-		country: 'Kyrgyzstan',
-		status: 'Verified',
-		avatar: 'path_to_avatar_image', // Replace with actual image path
-		email: 'nizcanu@gmail.com',
-	},
-	{
-		key: '1',
-		userInfo: 'Gabriel Green',
-		contact: '+1 (457) 348-4705',
-		age: 63,
-		country: 'Kyrgyzstan',
-		status: 'Verified',
-		avatar: 'path_to_avatar_image', // Replace with actual image path
-		email: 'nizcanu@gmail.com',
-	},
-	{
-		key: '1',
-		userInfo: 'Gabriel Green',
-		contact: '+1 (457) 348-4705',
-		age: 63,
-		country: 'Kyrgyzstan',
-		status: 'Verified',
-		avatar: 'path_to_avatar_image', // Replace with actual image path
-		email: 'nizcanu@gmail.com',
-	},
-
-	{
-		key: '1',
-		userInfo: 'Gabriel Green',
-		contact: '+1 (457) 348-4705',
-		age: 63,
-		country: 'Kyrgyzstan',
-		status: 'Verified',
-		avatar: 'path_to_avatar_image',
-		email: 'nizcanu@gmail.com',
-	},
-	{
-		key: '1',
-		userInfo: 'Gabriel Green',
-		contact: '+1 (457) 348-4705',
-		age: 63,
-		country: 'Kyrgyzstan',
-		status: 'Verified',
-		avatar: 'path_to_avatar_image', // Replace with actual image path
-		email: 'nizcanu@gmail.com',
-	},
-	{
-		key: '1',
-		userInfo: 'Gabriel Green',
-		contact: '+1 (457) 348-4705',
-		age: 63,
-		country: 'Kyrgyzstan',
-		status: 'Verified',
-		avatar: 'path_to_avatar_image', // Replace with actual image path
-		email: 'nizcanu@gmail.com',
-	},
-	{
-		key: '1',
-		userInfo: 'Gabriel Green',
-		contact: '+1 (457) 348-4705',
-		age: 63,
-		country: 'Kyrgyzstan',
-		status: 'Verified',
-		avatar: 'path_to_avatar_image', // Replace with actual image path
-		email: 'nizcanu@gmail.com',
-	},
-	{
-		key: '1',
-		userInfo: 'Gabriel Green',
-		contact: '+1 (457) 348-4705',
-		age: 63,
-		country: 'Kyrgyzstan',
-		status: 'Verified',
-		avatar: 'path_to_avatar_image', // Replace with actual image path
-		email: 'nizcanu@gmail.com',
-	},
-	{
-		key: '1',
-		userInfo: 'Gabriel Green',
-		contact: '+1 (457) 348-4705',
-		age: 63,
-		country: 'Kyrgyzstan',
-		status: 'Verified',
-		avatar: 'path_to_avatar_image', // Replace with actual image path
-		email: 'nizcanu@gmail.com',
-	},
-	{
-		key: '1',
-		userInfo: 'Gabriel Green',
-		contact: '+1 (457) 348-4705',
-		age: 63,
-		country: 'Kyrgyzstan',
-		status: 'Verified',
-		avatar: 'path_to_avatar_image', // Replace with actual image path
-		email: 'nizcanu@gmail.com',
-	},
-	{
-		key: '1',
-		userInfo: 'Gabriel Green',
-		contact: '+1 (457) 348-4705',
-		age: 63,
-		country: 'Kyrgyzstan',
-		status: 'Verified',
-		avatar: 'path_to_avatar_image', // Replace with actual image path
-		email: 'nizcanu@gmail.com',
-	},
-];
+const initialValues = {
+	id: '',
+	firstName: '',
+	lastName: '',
+	cnic: '',
+	password: '',
+	email: '',
+	phoneNumber: '',
+	role: '',
+	address: '',
+	createdAt: ''
+}
 
 const Users = () => {
-	const [currentPage, setCurrentPage] = useState(1);
-	const [pageSize, setPageSize] = useState(5); // Default page size
+	const [formState, setFormState] = useState({ mode: null, isVisible: false, initialValues });
+	const { loading, error, data } = useQueryHook(GET_USERS, {
+		variables: {
+			page: 1,
+			limit: 10,
+			sortBy: 'createdAt',
+			sortOrder: 'asc',
+			search: '',
+		},
+	});
 
-	const handleTableChange = (pagination) => {
-		// When table pagination is changed, update the state
-		setCurrentPage(pagination.current);
-		setPageSize(pagination.pageSize);
+
+	if (loading) return <SpinLoader />;
+	if (error) return <p>Error: {error.message}</p>;
+
+	const { data: users, totalPages, currentPage } = data.users;
+
+	const handleFormSubmit = (values) => {
+		console.log('Adding/Editing/Viewing user:', values);
+		setFormState({ ...formState, isVisible: false });
+	};
+
+	const onCancel = () => setFormState({ ...formState, isVisible: false });
+
+	const handleDeleteUser = () => {
+		Modal.error({
+			title: 'This is an error message',
+			content: 'some messages...some messages...',
+		});
+	};
+
+	const setFormModeAndVisible = (mode, initialValues = {}) => {
+		setFormState({ mode, isVisible: true, initialValues });
 	};
 
 	return (
-		<>
-			<Table
-				columns={columns}
-				dataSource={data}
-				pagination={{
-					current: currentPage,
-					pageSize: pageSize,
-					onChange: (page, pageSize) => {
-						setCurrentPage(page);
-						setPageSize(pageSize);
-					},
-				}}
-				onChange={handleTableChange}
-				scroll={{
-					y: '65vh',
-					x: 1200,
-				}}
+		<Paper style={{ background: 'white', paddingTop: '5px' }}>
+			<Header setIsAddUser={() => setFormModeAndVisible('add')} />
+			<List
+				data={users}
+				totalPages={totalPages}
+				currentPage={currentPage}
+				isLoading={loading}
+				setFormModeAndVisible={setFormModeAndVisible}
+				handleDeleteUser={handleDeleteUser} s
 			/>
-		</>
+			{formState.isVisible && (
+				<UserForm
+					visible={formState.isVisible}
+					onCancel={onCancel}
+					onSubmit={handleFormSubmit}
+					initialValues={formState.initialValues}
+					mode={formState.mode}
+				/>
+			)}
+		</Paper>
 	);
 };
 

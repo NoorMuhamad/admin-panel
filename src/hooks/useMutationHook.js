@@ -1,7 +1,8 @@
 import { useMutation } from '@apollo/client';
+import { getAccessToken } from 'utils/password-strength';
 
 const useMutationHook = (mutation, options = {}, isTokenApplied = true) => {
-	const authorizationToken = localStorage.getItem('authorizationToken');
+	const authorizationToken = getAccessToken();
 	const isAuthorized = !!authorizationToken;
 	const [mutateFunction, { loading, error, data }] = useMutation(mutation, {
 		...options,

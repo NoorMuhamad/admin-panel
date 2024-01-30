@@ -1,3 +1,6 @@
+
+import { Tooltip } from 'antd';
+import moment from 'moment';
 // has number
 const hasNumber = (number) => new RegExp(/[0-9]/).test(number);
 
@@ -31,4 +34,27 @@ export const strengthIndicator = (number) => {
 export const isAuthenticated = () => {
   const token = localStorage.getItem('user');
   return Boolean(token);
-}; 
+};
+
+export const getAccessToken = () => {
+  try {
+    const user = JSON.parse(localStorage.getItem('user'));
+    return user?.accessToken;
+  } catch (error) {
+    console.error('Error retrieving access token:', error);
+    return null;
+  }
+};
+
+export const renderEllipsisTooltip = (text, width) => (
+  <Tooltip title={text}>
+    <div style={{ width, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+      {text}
+    </div>
+  </Tooltip>
+);
+
+
+export const formatDate = (date) => {
+  return moment(date).format('YYYY-MM-DD');
+};
