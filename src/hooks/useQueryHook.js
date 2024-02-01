@@ -20,7 +20,7 @@ const useQueryHook = (query, options = {}, isTokenApplied = true) => {
 	};
 
 	// Using the useQuery hook with enhanced configuration
-	const { loading, error, data } = useQuery(query, {
+	const { loading, error, data, refetch } = useQuery(query, {
 		...options,
 		context: {
 			...options.context,
@@ -34,7 +34,7 @@ const useQueryHook = (query, options = {}, isTokenApplied = true) => {
 
 	// Additional logic can be added here if needed
 
-	return { loading, error, data };
+	return { loading, error, data, refetch };
 };
 
 export default useQueryHook;

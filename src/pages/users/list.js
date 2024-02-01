@@ -1,10 +1,10 @@
-import { CheckCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { EyeOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Pagination, Space, Table } from 'antd';
 import PropTypes from 'prop-types';
 import { Fragment, memo } from 'react';
 import { formatDate, renderEllipsisTooltip } from 'utils/password-strength';
 
-const List = memo(({ data, totalPages, currentPage, isLoading, setFormModeAndVisible, handleDeleteUser }) => {
+const List = memo(({ data, totalPages, isLoading, page, limit, handlePageChange, setFormModeAndVisible, handleDeleteUser, handleSortBy }) => {
 	const handleViewEditClick = (mode, initialValues) => () => setFormModeAndVisible(mode, initialValues);
 
 	const renderColumn = (title, dataIndex) => ({
@@ -13,7 +13,10 @@ const List = memo(({ data, totalPages, currentPage, isLoading, setFormModeAndVis
 		width: 150,
 		key: dataIndex,
 		render: (text) => renderEllipsisTooltip(text, 150),
-		sorter: (a, b) => a.name.length - b.name.length,
+		sorter: true,
+		onHeaderCell: () => ({
+			onClick: () => handleSortBy(dataIndex),
+		}),
 	});
 
 	const columns = [
@@ -24,15 +27,18 @@ const List = memo(({ data, totalPages, currentPage, isLoading, setFormModeAndVis
 		renderColumn('Password', 'password'),
 		renderColumn('Email', 'email'),
 		renderColumn('PhoneNumber', 'phoneNumber'),
+		renderColumn('Role', 'role'),
 		{
 			title: renderEllipsisTooltip('JoiningDate', 150),
 			dataIndex: 'createdAt',
 			width: 150,
 			key: 'createdAt',
 			render: (text) => formatDate(text),
-			sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
+			sorter: true,
+			onHeaderCell: () => ({
+				onClick: () => handleSortBy('createdAt'),
+			}),
 		},
-		renderColumn('Role', 'role'),
 		{
 			title: 'Actions',
 			key: 'action',
@@ -41,9 +47,9 @@ const List = memo(({ data, totalPages, currentPage, isLoading, setFormModeAndVis
 			align: 'center',
 			render: (_, record) => (
 				<Space size="middle">
-					<CheckCircleOutlined onClick={handleViewEditClick('view', record)} />
-					<EditOutlined onClick={handleViewEditClick('edit', record)} />
-					<DeleteOutlined onClick={() => handleDeleteUser(record.id)} />
+					<EyeOutlined onClick={handleViewEditClick('view', record)} style={{ color: 'green' }} />
+					<EditOutlined onClick={handleViewEditClick('edit', record)} style={{ color: 'blue' }} />
+					<DeleteOutlined onClick={() => handleDeleteUser(record.id)} style={{ color: 'red' }} />
 				</Space>
 			),
 		},
@@ -51,17 +57,18 @@ const List = memo(({ data, totalPages, currentPage, isLoading, setFormModeAndVis
 
 	return (
 		<Fragment>
-			<Table columns={columns} dataSource={data} loading={isLoading} scroll={{ x: 'max-content', y: '60vh' }} pagination={false} />
-			{totalPages > 1 && (
-				<Pagination
-					current={currentPage}
-					total={totalPages * 10}
-					showQuickJumper
-					showSizeChanger
-					showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} users`}
-					style={{ padding: '10px', textAlign: 'right' }}
-				/>
-			)}
+			<Table columns={columns} dataSource={data} loading={isLoading} scroll={{ x: 'max-content', y: '65vh' }} pagination={false} height='60vh' />
+
+			<Pagination
+				current={page}
+				pageSize={limit}
+				onChange={handlePageChange}
+				total={totalPages * 10}
+				showQuickJumper
+				showSizeChanger
+				showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+				style={{ padding: '10px', textAlign: 'right', position: 'sticky', bottom: 0 }}
+			/>
 		</Fragment>
 	);
 });
@@ -70,9 +77,12 @@ List.propTypes = {
 	setFormModeAndVisible: PropTypes.func.isRequired,
 	handleDeleteUser: PropTypes.func.isRequired,
 	totalPages: PropTypes.number.isRequired,
-	currentPage: PropTypes.number.isRequired,
+	page: PropTypes.number.isRequired,
+	limit: PropTypes.number.isRequired,
 	isLoading: PropTypes.bool.isRequired,
 	data: PropTypes.arrayOf(PropTypes.object).isRequired,
+	handleSortBy: PropTypes.func.isRequired,
+	handlePageChange: PropTypes.func.isRequired,
 };
 
 export default List;

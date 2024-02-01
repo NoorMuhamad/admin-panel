@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Input, Space } from 'antd';
 
-const Header = ({ setIsAddUser }) => {
+const Header = ({ setIsAddUser, handleSearch, search }) => {
 	return (
 		<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '10px' }}>
 			<Space>
@@ -12,7 +12,8 @@ const Header = ({ setIsAddUser }) => {
 					placeholder="Search"
 					prefix={<SearchOutlined style={{ marginRight: 8 }} />}
 					allowClear
-				// onSearch={onSearch}
+					value={search}
+					onChange={handleSearch}
 				/>
 			</Space>
 			<Button type="primary" size="large" style={{ height: '40px' }} onClick={() => setIsAddUser(true)} icon={<PlusOutlined />}>
@@ -24,6 +25,8 @@ const Header = ({ setIsAddUser }) => {
 
 Header.propTypes = {
 	setIsAddUser: PropTypes.func.isRequired,
+	handleSearch: PropTypes.func.isRequired,
+	search: PropTypes.string,
 };
 
 export default Header;
