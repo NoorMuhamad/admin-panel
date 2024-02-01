@@ -1,8 +1,10 @@
 import { useMutation } from '@apollo/client';
 import { getAccessToken } from 'utils/password-strength';
+import { useNavigate } from 'react-router-dom';
 
 const useMutationHook = (mutation, options = {}, isTokenApplied = true) => {
 	const authorizationToken = getAccessToken();
+	const navigate = useNavigate();
 	const isAuthorized = !!authorizationToken;
 	const [mutateFunction, { loading, error, data }] = useMutation(mutation, {
 		...options,
@@ -24,6 +26,7 @@ const useMutationHook = (mutation, options = {}, isTokenApplied = true) => {
 			return response.data;
 		} catch (mutationError) {
 			console.error('Mutation error:', mutationError.message);
+			if (mutationError.message === 'Unauthorized') navigate('/login');
 			throw mutationError;
 		}
 	};

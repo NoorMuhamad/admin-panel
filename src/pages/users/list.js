@@ -43,7 +43,7 @@ const List = memo(({ data, totalPages, currentPage, isLoading, setFormModeAndVis
 				<Space size="middle">
 					<CheckCircleOutlined onClick={handleViewEditClick('view', record)} />
 					<EditOutlined onClick={handleViewEditClick('edit', record)} />
-					<DeleteOutlined onClick={() => handleDeleteUser(record)} />
+					<DeleteOutlined onClick={() => handleDeleteUser(record.id)} />
 				</Space>
 			),
 		},

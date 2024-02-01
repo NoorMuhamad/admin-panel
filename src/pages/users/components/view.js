@@ -1,15 +1,18 @@
 import React from 'react';
 import { Row, Col, Card, Avatar, Typography } from 'antd';
 import { UserOutlined, IdcardOutlined, LockOutlined, MailOutlined, CreditCardOutlined, CalendarOutlined, UsergroupAddOutlined, PhoneOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import PropTypes from 'prop-types';
+import { formatDate } from 'utils/password-strength';
 
 const { Meta } = Card;
 const { Text } = Typography;
 
-const View = () => {
+const View = ({ data }) => {
 	const cardStyle = {
-		width: 300,
+		width: 320,
 		border: '1px solid #e8e8e8',
 		borderRadius: '8px',
+		padding: '0px',
 	};
 
 	const avatarStyle = {
@@ -40,14 +43,14 @@ const View = () => {
 								icon={<UserOutlined />}
 							/>
 						}
-						title={<div style={titleStyle}>Earl Parrini</div>}
+						title={<div style={titleStyle}>{data.firstName} {data.lastName}</div>}
 						description={
 							<div style={descriptionStyle}>
 								<p>
-									<MailOutlined /> sah@gmail.com
+									<MailOutlined /> {data.email}
 								</p>
 								<p>
-									<EnvironmentOutlined /> Russia
+									<EnvironmentOutlined /> Pakistan
 								</p>
 							</div>
 						}
@@ -63,7 +66,7 @@ const View = () => {
 								<IdcardOutlined /> ID
 							</Text>
 							<br />
-							<Text>1</Text>
+							<Text>{data.id}</Text>
 						</Col>
 						<Col span={12}>
 							<Text strong>
@@ -79,14 +82,14 @@ const View = () => {
 								<CreditCardOutlined /> CNIC
 							</Text>
 							<br />
-							<Text>3130365105181</Text>
+							<Text>{data.cnic}</Text>
 						</Col>
 						<Col span={12}>
 							<Text strong>
 								<CalendarOutlined /> JoiningDate
 							</Text>
 							<br />
-							<Text>2024-01-22</Text>
+							<Text>{formatDate(data.createdAt)}</Text>
 						</Col>
 					</Row>
 					<Row gutter={16} style={{ marginTop: 16 }}>
@@ -95,14 +98,14 @@ const View = () => {
 								<UsergroupAddOutlined /> Role
 							</Text>
 							<br />
-							<Text>Owner</Text>
+							<Text>{data.role}</Text>
 						</Col>
 						<Col span={12}>
 							<Text strong>
 								<PhoneOutlined /> Phone Number
 							</Text>
 							<br />
-							<Text>+923008772984</Text>
+							<Text>{data.phoneNumber}</Text>
 						</Col>
 					</Row>
 					<Row gutter={16} style={{ marginTop: 16 }}>
@@ -111,13 +114,17 @@ const View = () => {
 								<EnvironmentOutlined /> Address
 							</Text>
 							<br />
-							<Text>Al-kabir town phase 2 rawind road Lahore</Text>
+							<Text>{data.address}</Text>
 						</Col>
 					</Row>
 				</div>
 			</Col>
 		</Row>
 	);
+};
+
+View.propTypes = {
+	data: PropTypes.object,
 };
 
 export default View;

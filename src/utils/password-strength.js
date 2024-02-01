@@ -58,3 +58,10 @@ export const renderEllipsisTooltip = (text, width) => (
 export const formatDate = (date) => {
   return moment(date).format('YYYY-MM-DD');
 };
+
+
+export const modelTitles = {
+  'add': 'Add',
+  'edit': 'Edit',
+  'view': 'View',
+};
