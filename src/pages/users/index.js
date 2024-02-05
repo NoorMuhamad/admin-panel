@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
 import { Paper } from '@mui/material';
 import { Modal } from 'antd';
+import Error from 'components/Error';
 import useMutationHook from 'hooks/useMutationHook';
 import useQueryHook from 'hooks/useQueryHook';
+import { useEffect, useState } from 'react';
 import { CREATE_USER, DELETE_USER, GET_USERS, UPDATE_USER } from '../../graphQl/user/index';
 import Header from './components/header';
 import UserForm from './components/userForm';
@@ -46,7 +47,11 @@ const Users = () => {
 		}
 	}, [isLoading, data]);
 
-	if (error) return <p>Error: {error.message}</p>;
+	if (error) {
+		const errorCode = (error.graphQLErrors[0]?.extensions.code) || 'DEFAULT_WARNING';
+		return <Error errorCode={errorCode} />;
+	}
+
 
 	const { users: { data: users, totalPages, currentPage } } = data || { users: { data: [], totalPages: 0, currentPage: 1 } };
 
