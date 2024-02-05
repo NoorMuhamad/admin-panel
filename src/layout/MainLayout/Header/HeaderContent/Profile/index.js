@@ -28,7 +28,7 @@ import SettingTab from './SettingTab';
 // assets
 import avatar1 from 'assets/images/users/avatar-1.png';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from 'reducers/authReducer';
 
@@ -58,6 +58,9 @@ const Profile = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { firstName, lastName, role } = useSelector((state) => state.authReducer.user);
+  console.log(firstName, lastName, role)
 
   const handleLogout = async () => {
     dispatch(logout())
@@ -102,7 +105,7 @@ const Profile = () => {
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
           <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
-          <Typography variant="subtitle1">TesterOwner</Typography>
+          <Typography variant="subtitle1">{`${firstName} ${lastName}`}</Typography>
         </Stack>
       </ButtonBase>
       <Popper
@@ -145,9 +148,9 @@ const Profile = () => {
                           <Stack direction="row" spacing={1.25} alignItems="center">
                             <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
                             <Stack>
-                              <Typography variant="h6">TesterOwner</Typography>
+                              <Typography variant="h6">{`${firstName} ${lastName}`}</Typography>
                               <Typography variant="body2" color="textSecondary">
-                                owner
+                                {`${role}`}
                               </Typography>
                             </Stack>
                           </Stack>
