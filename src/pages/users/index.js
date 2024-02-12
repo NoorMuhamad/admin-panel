@@ -20,7 +20,7 @@ const initialValues = {
 	phoneNumber: '',
 	role: '',
 	address: '',
-	createdAt: ''
+	createdAt: '',
 };
 
 const Users = () => {
