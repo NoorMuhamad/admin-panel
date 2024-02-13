@@ -23,6 +23,19 @@ const validationSchema = Yup.object().shape({
 	address: Yup.string().required('Please enter your address')
 });
 
+
+const beforeUpload = (file) => {
+	const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+	if (!isJpgOrPng) {
+		message.error('You can only upload JPG/PNG file!');
+	}
+	const isLt2M = file.size / 1024 / 1024 < 2;
+	if (!isLt2M) {
+		message.error('Image must smaller than 2MB!');
+	}
+	return isJpgOrPng && isLt2M;
+};
+
 const UserForm = ({ visible, onCancel, onSubmit, initialValues, mode }) => {
 	const isViewMode = mode === 'view';
 
@@ -81,8 +94,8 @@ const UserForm = ({ visible, onCancel, onSubmit, initialValues, mode }) => {
 										listType="picture-circle"
 										className="image-uploader"
 										showUploadList={false}
-										action="/path/to/upload" // Replace with your upload URL
-										beforeUpload={() => {/* Perform before upload checks here */ }}
+										// action="/path/to/upload" // Replace with your upload URL
+										beforeUpload={beforeUpload}
 									>
 										{formik.values.image ? <img src={formik.values.image} alt="avatar" style={{ width: '100%' }} /> : (
 											<div>
