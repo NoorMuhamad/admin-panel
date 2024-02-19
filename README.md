@@ -1,4 +1,4 @@
-Mantis offers everything needed to build an advanced dashboard application. In the initial release, we included following high-end features,
+IngenuitySol offers everything needed to build an advanced dashboard application. In the initial release, we included following high-end features,
 
 - Support React18.
 - Professional user interface.
@@ -19,7 +19,7 @@ yarn start
 
 ## Documentation
 
-[Mantis documentation](https://codedthemes.gitbook.io/mantis/) helps you out in all aspects from Installation to deployment.
+[IngenuitySol documentation](https://codedthemes.gitbook.io/mantis/) helps you out in all aspects from Installation to deployment.
 
 ## Technology stack
 

@@ -18,7 +18,7 @@ const Logo = () => {
     /**
      * if you want to use image instead of svg uncomment following, and comment out <svg> element.
      *
-     * <img src={logo} alt="Mantis" width="100" />
+     * <img src={logo} alt="IngenuitySol" width="100" />
      *
      */
     <>
@@ -44,7 +44,7 @@ const Logo = () => {
           fill={theme.palette.common.black}
           fillOpacity="0.85"
         />
-        <defs>
+        {/* <defs>
           <linearGradient id="paint0_linear" x1="8.62526" y1="14.0888" x2="5.56709" y2="17.1469" gradientUnits="userSpaceOnUse">
             <stop stopColor={theme.palette.primary.darker} />
             <stop offset="0.9637" stopColor={theme.palette.primary.dark} stopOpacity="0" />
@@ -53,7 +53,7 @@ const Logo = () => {
             <stop stopColor={theme.palette.primary.darker} />
             <stop offset="1" stopColor={theme.palette.primary.dark} stopOpacity="0" />
           </linearGradient>
-        </defs>
+        </defs> */}
       </svg>
     </>
   );

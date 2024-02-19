@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Input, Space } from 'antd';
 
-const Header = ({ setIsAddComplaint, handleSearch, search }) => {
+const Header = ({ setIsAddCustomer, handleSearch, search }) => {
 	return (
 		<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '10px' }}>
 			<Space>
@@ -16,15 +16,15 @@ const Header = ({ setIsAddComplaint, handleSearch, search }) => {
 					onChange={handleSearch}
 				/>
 			</Space>
-			<Button type="primary" size="large" style={{ height: '40px' }} onClick={() => setIsAddComplaint(true)} icon={<PlusOutlined />}>
-				Add Complaint
+			<Button type="primary" size="large" style={{ height: '40px' }} onClick={() => setIsAddCustomer(true)} icon={<PlusOutlined />}>
+				Add User
 			</Button>
 		</div>
 	);
 }
 
 Header.propTypes = {
-	setIsAddComplaint: PropTypes.func.isRequired,
+	setIsAddCustomer: PropTypes.func.isRequired,
 	handleSearch: PropTypes.func.isRequired,
 	search: PropTypes.string,
 };

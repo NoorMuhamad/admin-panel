@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Fragment, memo } from 'react';
 import { formatDate, renderEllipsisTooltip } from 'utils/password-strength';
 
-const List = memo(({ data, totalPages, isLoading, page, limit, handlePageChange, setFormModeAndVisible, handleDeleteComplaint, handleSortBy }) => {
+const List = memo(({ data, totalPages, isLoading, page, limit, handlePageChange, setFormModeAndVisible, handleDeleteCustomer, handleSortBy }) => {
 	const handleViewEditClick = (mode, initialValues) => () => setFormModeAndVisible(mode, initialValues);
 
 	const renderColumn = (title, dataIndex) => ({
@@ -20,13 +20,15 @@ const List = memo(({ data, totalPages, isLoading, page, limit, handlePageChange,
 	});
 
 	const columns = [
-		renderColumn('ID', 'id'),
-		renderColumn('CustomerName', 'customerName'),
-		renderColumn('Subject', 'subject'),
-		renderColumn('Description', 'description'),
-		renderColumn('Status', 'status'),
+		renderColumn('FirstName', 'firstName'),
+		renderColumn('LastName', 'lastName'),
+		renderColumn('CNIC', 'cnic'),
+		renderColumn('Email', 'email'),
+		renderColumn('PhoneNumber', 'phoneNumber'),
+		renderColumn('Address', 'address'),
+		renderColumn('IsActive', 'isActive'),
 		{
-			title: renderEllipsisTooltip('CreatedAt', 150),
+			title: renderEllipsisTooltip('JoiningDate', 150),
 			dataIndex: 'createdAt',
 			width: 150,
 			key: 'createdAt',
@@ -46,7 +48,7 @@ const List = memo(({ data, totalPages, isLoading, page, limit, handlePageChange,
 				<Space size="middle">
 					<EyeOutlined onClick={handleViewEditClick('view', record)} style={{ color: 'green' }} />
 					<EditOutlined onClick={handleViewEditClick('edit', record)} style={{ color: 'blue' }} />
-					<DeleteOutlined onClick={() => handleDeleteComplaint(record.id)} style={{ color: 'red' }} />
+					<DeleteOutlined onClick={() => handleDeleteCustomer(record.id)} style={{ color: 'red' }} />
 				</Space>
 			),
 		},
@@ -72,7 +74,7 @@ const List = memo(({ data, totalPages, isLoading, page, limit, handlePageChange,
 
 List.propTypes = {
 	setFormModeAndVisible: PropTypes.func.isRequired,
-	handleDeleteComplaint: PropTypes.func.isRequired,
+	handleDeleteCustomer: PropTypes.func.isRequired,
 	totalPages: PropTypes.number.isRequired,
 	page: PropTypes.number.isRequired,
 	limit: PropTypes.number.isRequired,
