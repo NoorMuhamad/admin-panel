@@ -1,0 +1,24 @@
+.cardHoverEffect {
+	position: relative;
+	transition: all 0.3s ease;
+}
+
+.iconContainer {
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 10px;
+	margin-top: 8px;
+	display: none;
+}
+
+.cardHoverEffect:hover .iconContainer {
+	display: block;
+}
+
+.ellipsis {
+	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
