@@ -4,15 +4,11 @@ const GET_PACKAGES = gql`
   query Packages($page: Int!, $limit: Int!, $sortBy: String, $sortOrder: String!, $search: String) {
     packages(page: $page, limit: $limit, sortBy: $sortBy, sortOrder: $sortOrder, search: $search) {
       data {
-        id
-        firstName
-        lastName
-        cnic
-        password
-        email
-        phoneNumber
-        role
-        address
+       	id
+	      name
+	      monthlyFee
+	      speed
+	      isActive
         createdAt
       }
       totalPages
@@ -25,15 +21,10 @@ const GET_PACKAGES = gql`
 const UPDATE_PACKAGE = gql`
 mutation updatePackage ($updatePackageType: UpdatePackageType!) {
     updatePackage (updatePackageType: $updatePackageType) {
-        id
-        firstName
-        lastName
-        cnic
-        password
-        email
-        phoneNumber
-        role
-        address
+        name
+	      monthlyFee
+	      speed
+	      isActive
     }
 }
 `;
@@ -41,14 +32,10 @@ mutation updatePackage ($updatePackageType: UpdatePackageType!) {
 const CREATE_PACKAGE = gql`
 mutation createPackage ($createPackageType: CreatePackageType!) {
     createPackage (createPackageType: $createPackageType) {
-        id
-        firstName
-        lastName
-        password
-        email
-        phoneNumber
-        role
-        address
+        name
+	      monthlyFee
+	      speed
+	      isActive
         createdAt
         updatedAt
     }

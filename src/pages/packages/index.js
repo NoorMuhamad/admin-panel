@@ -1,105 +1,127 @@
-import React, { useState } from 'react';
-import { Card, Col, Row, Modal, Form, Input, Switch, notification, Button, Tooltip } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import '../../themes/css/packages/index.css'; // Make sure to import the CSS file
+import { Paper } from '@mui/material';
+import { Modal } from 'antd';
+import Error from 'components/Error';
+import useMutationHook from 'hooks/useMutationHook';
+import useQueryHook from 'hooks/useQueryHook';
+import { useEffect, useState } from 'react';
+import { CREATE_PACKAGE, DELETE_PACKAGE, GET_PACKAGES, UPDATE_PACKAGE } from '../../graphQl/packages/index';
+import Header from './components/header';
+import PackageForm from './components/packageForm';
+import List from './list';
 
-const packagePatterns = ['#f0d9d9', '#d9f0d9', '#f9f6cf'];
-
-const generatePattern = (index) => {
-	return packagePatterns[index % packagePatterns.length];
+const initialValues = {
+	id: '',
+	name: '',
+	monthlyFee: '',
+	speed: '',
+	isActive: '',
+	createdAt: '',
 };
 
-const initialPackages = [
-	{ id: 1, title: "Basic Package", content: "Ideal for beginners.", price: "$99", isActive: true },
-	{ id: 2, title: "Standard Package", content: "A perfect package for regular users.", price: "$199", isActive: false },
-];
-
 const Packages = () => {
-	const [packages, setPackages] = useState(initialPackages);
-	const [isModalVisible, setIsModalVisible] = useState(false);
+	const [formState, setFormState] = useState({ mode: null, isVisible: false, initialValues });
+	const [page, setPage] = useState(1);
+	const [limit, setLimit] = useState(10);
+	const [sortBy, setSortBy] = useState('');
+	const [sortOrder, setSortOrder] = useState('asc');
+	const [search, setSearch] = useState('');
+	const [prevPackages, setPrevPackages] = useState([]);
 
-	const showModal = () => setIsModalVisible(true);
-	const handleCancel = () => setIsModalVisible(false);
-	const handleEdit = (id) => {
-		// Implement your edit functionality here
-		console.log('Editing package with id:', id);
-	};
-	const handleDelete = (id) => {
-		// Implement your delete functionality here
-		console.log('Deleting package with id:', id);
+	const { handleMutation: handleUpdatePackage, loading: loadingUpdate, error: errorUpdate } = useMutationHook(UPDATE_PACKAGE);
+	const { handleMutation: handleCreatePackage, loading: loadingCreate, error: errorCreate } = useMutationHook(CREATE_PACKAGE);
+	const { handleMutation: handleDeletePackage, loading: loadingDelete, error: errorDelete } = useMutationHook(DELETE_PACKAGE);
+	const { loading: loadingQuery, error: errorQuery, data, refetch } = useQueryHook(GET_PACKAGES, { variables: { page, limit, sortBy, sortOrder, search } });
+
+	const isLoading = loadingCreate || loadingUpdate || loadingDelete || loadingQuery;
+	const error = errorCreate || errorUpdate || errorDelete || errorQuery;
+
+	// Update prevPackages whenever new data is loaded
+	useEffect(() => {
+		if (!isLoading && data && data.packages && data.packages.data.length > 0) {
+			setPrevPackages(data.packages.data);
+		}
+	}, [isLoading, data]);
+
+	if (error) {
+		const errorCode = (error.graphQLErrors[0]?.extensions.code) || 'DEFAULT_WARNING';
+		return <Error errorCode={errorCode} />;
+	}
+
+
+	const { packages: { data: packages, totalPages, currentPage } } = data || { packages: { data: [], totalPages: 0, currentPage: 1 } };
+
+	const handleFormSubmit = async (values) => {
+		try {
+			if (formState.mode === 'edit') {
+				await handleUpdatePackage({ updatePackageType: { ...values } });
+			}
+			if (formState.mode === 'add') {
+				await handleCreatePackage({ createPackageType: { ...values } });
+				refetch();
+			}
+			setFormState({ ...formState, isVisible: false });
+		} catch (err) {
+			console.log("err", err);
+		}
 	};
 
-	const onFinish = (values) => {
-		setPackages([...packages, { ...values, isActive: values.isActive ? true : false }]);
-		setIsModalVisible(false);
-		notification.success({ message: 'Package added successfully!' });
+	const onCancel = () => setFormState({ ...formState, isVisible: false });
+
+	const handlerDeletePackage = (id) => {
+		Modal.confirm({
+			title: 'Confirm Deletion',
+			content: 'Are you sure you want to delete this Package?',
+			async onOk() {
+				await handleDeletePackage({ id });
+				refetch();
+			},
+			onCancel() {
+				onCancel();
+			},
+		});
+	};
+
+	const setFormModeAndVisible = (mode, initialValues = {}) => {
+		const { __typename, createdAt, ...rest } = initialValues;
+		console.log(__typename, createdAt);
+		setFormState({ mode, isVisible: true, initialValues: rest });
+	};
+
+	const handleSearch = (e) => {
+		setSearch(e.target.value);
+	};
+
+	const handleSortBy = (column) => {
+		const newSortOrder = sortBy === column ? (sortOrder === 'asc' ? 'desc' : 'asc') : 'asc';
+		setSortBy(column);
+		setSortOrder(newSortOrder);
+	};
+
+	const handlePageChange = (page, pageSize) => {
+		setPage(page);
+		setLimit(pageSize);
 	};
 
 	return (
-		<>
-			<Row gutter={[16, 16]}>
-				{packages.map((pkg, index) => (
-					<Col key={pkg.id} xs={24} sm={12} md={8} lg={6} xl={6}>
-						<Card
-							className="cardHoverEffect"
-							title={pkg.title}
-							bordered={false}
-							style={{ background: generatePattern(index), minHeight: '200px' }}
-						>
-							<div className="iconContainer">
-								<Tooltip title="Edit">
-									<EditOutlined onClick={() => handleEdit(pkg.id)} style={{ marginRight: 8, fontSize: '18px', color: 'blue' }} />
-								</Tooltip>
-								<Tooltip title="Delete">
-									<DeleteOutlined onClick={() => handleDelete(pkg.id)} style={{ marginRight: 8, fontSize: '18px', color: 'red' }} />
-								</Tooltip>
-							</div>
-							<div style={{ marginBottom: '10px' }}>
-								<strong>Description:</strong> <span className="ellipsis">{pkg.content}</span>
-							</div>
-							<div style={{ marginBottom: '10px' }}>
-								<strong>Price:</strong> {pkg.price}
-							</div>
-							<div style={{ marginBottom: '10px' }}>
-								<strong>Status:</strong> {pkg.isActive ? <span style={{ color: 'green' }}>Active</span> : <span style={{ color: 'red' }}>Inactive</span>}
-							</div>
-						</Card>
-					</Col>
-				))}
-				<Col xs={24} sm={12} md={8} lg={6} xl={6}>
-					<Card
-						hoverable
-						className="cardHoverEffect"
-						style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '220px', background: '#f0f2f5' }}
-						onClick={showModal}
-					>
-						<PlusOutlined style={{ fontSize: '24px', paddingRight: "5px" }} />
-						<span style={{ fontSize: '24px' }}>Create Package</span>
-					</Card>
-				</Col>
-			</Row>
-			<Modal title="Create New Package" visible={isModalVisible} onCancel={handleCancel} footer={null}>
-				<Form onFinish={onFinish}>
-					<Form.Item name="title" label="Package Title" rules={[{ required: true }]}>
-						<Input />
-					</Form.Item>
-					<Form.Item name="content" label="Description" rules={[{ required: true }]}>
-						<Input.TextArea />
-					</Form.Item>
-					<Form.Item name="price" label="Price" rules={[{ required: true }]}>
-						<Input prefix="$" />
-					</Form.Item>
-					<Form.Item name="isActive" label="Active" valuePropName="checked">
-						<Switch />
-					</Form.Item>
-					<Form.Item>
-						<Button type="primary" htmlType="submit">
-							Submit
-						</Button>
-					</Form.Item>
-				</Form>
-			</Modal>
-		</>
+		<Paper style={{ background: 'white', paddingTop: '5px' }}>
+			<Header setIsAddPackage={() => setFormModeAndVisible('add')} handleSearch={handleSearch} search={search} />
+			{/* Error Message */}
+			{error && <div>Error: {error.message}. Please try again.</div>}
+
+			<List
+				data={isLoading ? prevPackages : packages}
+				totalPages={totalPages}
+				currentPage={currentPage}
+				isLoading={isLoading}
+				setFormModeAndVisible={setFormModeAndVisible}
+				handleDeletePackage={handlerDeletePackage}
+				handleSortBy={handleSortBy}
+				handlePageChange={handlePageChange}
+				page={page}
+				limit={limit}
+			/>
+			{formState.isVisible && <PackageForm visible={formState.isVisible} onCancel={onCancel} onSubmit={handleFormSubmit} initialValues={formState.initialValues} mode={formState.mode} />}
+		</Paper>
 	);
 };
 
